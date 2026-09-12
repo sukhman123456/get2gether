@@ -1316,12 +1316,12 @@ function Hero({ onOpenReservation }: HeroProps) {
 
         <div className="hero-cinematic-sub-wrap">
           <span className="hero-sub-line" />
-          <p className="hero-cinematic-subtitle">GOOD FOOD • GOOD MOMENTS</p>
+          <p className="hero-cinematic-subtitle">AUTHENTIC FLAVOURS • BOTANICAL AMBIENCE • TIMELESS GATHERINGS</p>
           <span className="hero-sub-line" />
         </div>
 
         <p className="hero-cinematic-tagline">
-          Good food, beautiful surroundings and unforgettable moments — all in one place.
+          Where authentic clay-oven aromas, handcrafted cafe creations, and warm hospitality come together beneath glowing chandeliers in Gurdaspur.
         </p>
 
         <div className="hero-actions">
