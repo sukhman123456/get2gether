@@ -1231,9 +1231,10 @@ function Navbar({ onOpenReservation }: NavbarProps) {
    ======================================================== */
 interface HeroProps {
   onOpenReservation: () => void;
+  isDocked?: boolean;
 }
 
-function Hero({ onOpenReservation }: HeroProps) {
+function Hero({ onOpenReservation, isDocked = false }: HeroProps) {
   const heroParallaxRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroRatingRef = useRef<HTMLDivElement>(null);
@@ -1255,7 +1256,7 @@ function Hero({ onOpenReservation }: HeroProps) {
         // Parallax depth & slow reveal scaling on the background interior image
         if (heroParallaxRef.current) {
           const pY = isMobile ? scrollY * 0.15 : scrollY * 0.35;
-          const pScale = isMobile ? 1.0 : 1.0 + progress * 0.08;
+          const pScale = isMobile ? 1.05 : 1.05 + progress * 0.08;
           heroParallaxRef.current.style.transform = `translate3d(0, ${pY.toFixed(1)}px, 0) scale(${pScale.toFixed(3)})`;
         }
 
@@ -1299,6 +1300,7 @@ function Hero({ onOpenReservation }: HeroProps) {
             alt="Get 2 Gather Restaurant & Cafe interior with glowing chandeliers, dark wooden beams, and lush greenery"
             className="hero-image-kenburns"
             fetchPriority="high"
+            loading="eager"
             width={1920}
             height={1080}
           />
@@ -1308,7 +1310,7 @@ function Hero({ onOpenReservation }: HeroProps) {
       </div>
 
       <div ref={heroContentRef} className="hero-content cinematic-hero-center">
-        <div className="hero-brand-seal">
+        <div className={`hero-brand-seal ${!isDocked ? "is-awaiting-dock" : "is-docked"}`}>
           <div className="hero-seal-disc">
             <img src={officialLogoImage} alt="Get To Gether Emblem" width={42} height={42} />
           </div>
@@ -3599,10 +3601,145 @@ function Footer({ onOpenReservation }: FooterProps) {
 }
 
 /* ========================================================
+   CINEMATIC LOGO-TO-HOMEPAGE OPENING TRANSITION
+   ======================================================== */
+interface CinematicLogoTransitionProps {
+  onDockComplete: () => void;
+}
+
+function CinematicLogoTransition({ onDockComplete }: CinematicLogoTransitionProps) {
+  const [phase, setPhase] = useState<"intro" | "docking" | "complete">("intro");
+  const [dockTransform, setDockTransform] = useState<{
+    x: number;
+    y: number;
+    scale: number;
+  }>({ x: 0, y: -180, scale: 0.45 });
+
+  const discRef = useRef<HTMLDivElement>(null);
+  const onDockCompleteRef = useRef(onDockComplete);
+  onDockCompleteRef.current = onDockComplete;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onDockCompleteRef.current();
+      setPhase("complete");
+      return;
+    }
+
+    // Scroll to top immediately to ensure hero elements are aligned
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
+    // Step 1: Logo rests calmly for 1.0s, then begins calm, smooth 1.55s flight to hero logo
+    const dockTimer = window.setTimeout(() => {
+      // Find the hero seal disc on the homepage
+      const heroSeal = document.querySelector(".hero-seal-disc");
+      const introDisc = discRef.current;
+
+      if (heroSeal && introDisc) {
+        const heroRect = heroSeal.getBoundingClientRect();
+        const introRect = introDisc.getBoundingClientRect();
+
+        const deltaX = (heroRect.left + heroRect.width / 2) - (introRect.left + introRect.width / 2);
+        const deltaY = (heroRect.top + heroRect.height / 2) - (introRect.top + introRect.height / 2);
+        const scale = heroRect.width / introRect.width;
+
+        setDockTransform({
+          x: Math.round(deltaX * 10) / 10,
+          y: Math.round(deltaY * 10) / 10,
+          scale: Number(scale.toFixed(4)),
+        });
+      }
+
+      setPhase("docking");
+    }, 1000);
+
+    // Step 2: Safety fallback timer in case onTransitionEnd doesn't fire (e.g. background tab)
+    const safetyTimer = window.setTimeout(() => {
+      onDockCompleteRef.current();
+      setPhase("complete");
+    }, 2800);
+
+    return () => {
+      window.clearTimeout(dockTimer);
+      window.clearTimeout(safetyTimer);
+    };
+  }, []);
+
+  const handleDiscTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (e.target !== discRef.current || e.propertyName !== "transform") return;
+    // Exactly at touchdown: reveal hero seal underneath
+    onDockCompleteRef.current();
+    // Clear flying curtain seamlessly on next animation frame so there is zero flash or delay
+    requestAnimationFrame(() => {
+      setPhase("complete");
+    });
+  };
+
+  if (phase === "complete") return null;
+
+  const isDocking = phase === "docking";
+
+  return (
+    <div
+      className={`cinematic-logo-curtain ${isDocking ? "is-docking" : ""}`}
+      aria-hidden="true"
+    >
+      {/* Blurred atmospheric restaurant background */}
+      <div className="cinematic-logo-bg-layer">
+        <img
+          src={masterpieceInteriorImage}
+          alt=""
+          className="cinematic-logo-bg-img"
+          loading="eager"
+          fetchPriority="high"
+        />
+        <div className="cinematic-logo-bg-overlay" />
+      </div>
+
+      <div className="cinematic-logo-stage">
+        <div
+          ref={discRef}
+          className="cinematic-logo-disc"
+          onTransitionEnd={handleDiscTransitionEnd}
+          style={
+            isDocking
+              ? {
+                  transform: `translate3d(${dockTransform.x}px, ${dockTransform.y}px, 0) scale(${dockTransform.scale})`,
+                  transition: "transform 1.55s cubic-bezier(0.25, 1, 0.38, 1), box-shadow 1.55s ease, border-color 1.55s ease",
+                }
+              : undefined
+          }
+        >
+          <img
+            src={officialLogoImage}
+            alt="Get To Gether Emblem"
+            className="cinematic-logo-img"
+            width={98}
+            height={98}
+            loading="eager"
+          />
+          <div className={`cinematic-logo-disc-aura ${isDocking ? "is-fading-out" : ""}`} />
+        </div>
+
+        <div
+          className={`cinematic-logo-text-wrap ${isDocking ? "is-text-docking" : ""}`}
+        >
+          <h2 className="cinematic-logo-title">GET TO GETHER</h2>
+          <p className="cinematic-logo-subtitle">FINE DINING &amp; BOTANICAL CAFE</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ========================================================
    MAIN RESTAURANT SITE EXPORT
    ======================================================== */
 export function RestaurantSite() {
   const [reservationOpen, setReservationOpen] = useState(false);
+  const [isDocked, setIsDocked] = useState(false);
 
   useEffect(() => {
     // Cinematic Viewport Intersection Observer
@@ -3632,10 +3769,18 @@ export function RestaurantSite() {
 
   return (
     <>
+      <CinematicLogoTransition
+        onDockComplete={() => setIsDocked(true)}
+      />
       <CustomCursor />
-      <Navbar onOpenReservation={() => setReservationOpen(true)} />
+      <Navbar
+        onOpenReservation={() => setReservationOpen(true)}
+      />
       <main>
-        <Hero onOpenReservation={() => setReservationOpen(true)} />
+        <Hero
+          onOpenReservation={() => setReservationOpen(true)}
+          isDocked={isDocked}
+        />
         <OurStorySection />
         <RestaurantExperienceSection />
         <FounderSection />
