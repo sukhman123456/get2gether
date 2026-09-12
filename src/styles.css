@@ -1140,22 +1140,96 @@ button, a {
 
 /* Continuous Ken Burns Slow Breathing Effect */
 .hero-image-kenburns {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  max-width: none;
   object-fit: cover;
-  animation: heroContinuousKenBurns 22s ease-in-out infinite alternate;
+  object-position: center 40%;
+  animation: heroContinuousKenBurns 18s ease-in-out infinite alternate;
   will-change: transform;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 @keyframes heroContinuousKenBurns {
   0% {
-    transform: scale(1.02) translate3d(0, 0, 0);
+    transform: scale(1.03) translate3d(0, 0, 0);
   }
   50% {
-    transform: scale(1.07) translate3d(-0.4%, -0.3%, 0);
+    transform: scale(1.09) translate3d(-1%, -0.8%, 0);
   }
   100% {
-    transform: scale(1.02) translate3d(0, 0, 0);
+    transform: scale(1.04) translate3d(0.8%, -0.4%, 0);
+  }
+}
+
+/* Ambient Warm Gold Light Sweep across chandeliers & timber rafters */
+.hero-ambient-light-sweep {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    ellipse 70% 55% at 20% 45%,
+    rgba(201, 164, 92, 0.25) 0%,
+    rgba(201, 164, 92, 0.08) 45%,
+    transparent 75%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: heroLightSweepAnim 14s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes heroLightSweepAnim {
+  0% {
+    transform: translate3d(-35%, 0, 0) scale(0.95);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(25%, -2%, 0) scale(1.08);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(75%, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+}
+
+/* Mobile-Specific Smooth Hardware Animation */
+@media (max-width: 768px) {
+  .hero-image-kenburns {
+    inset: -8%;
+    width: 116%;
+    height: 116%;
+    object-position: center 36%;
+    animation: heroKenBurnsMobile 14s ease-in-out infinite alternate !important;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hero-ambient-light-sweep {
+    animation-duration: 10s;
+    background: radial-gradient(
+      ellipse 80% 60% at 30% 40%,
+      rgba(201, 164, 92, 0.28) 0%,
+      rgba(201, 164, 92, 0.09) 50%,
+      transparent 80%
+    );
+  }
+}
+
+@keyframes heroKenBurnsMobile {
+  0% {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.13) translate3d(-1.8%, -1.2%, 0);
+  }
+  100% {
+    transform: scale(1.06) translate3d(1.2%, -0.6%, 0);
   }
 }
 
@@ -6618,18 +6692,19 @@ button, a {
     padding-bottom: 60px;
   }
   .hero-cinematic-title {
-    font-size: clamp(20px, 5.8vw, 28px);
-    letter-spacing: 0.2em;
+    font-size: clamp(22px, 6vw, 30px);
+    letter-spacing: 0.18em;
   }
   .hero-cinematic-subtitle {
     font-size: 10px;
-    letter-spacing: 0.26em;
+    letter-spacing: 0.16em;
   }
   .hero-sub-line {
     width: 20px;
   }
   .hero-cinematic-tagline {
     font-size: 13.5px;
+    line-height: 1.55;
     margin-bottom: 24px;
     padding: 0 8px;
   }

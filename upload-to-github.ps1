@@ -19,7 +19,7 @@ Write-Host "[3/4] Staging all updated files..." -ForegroundColor Yellow
 git add -A
 
 Write-Host "[4/4] Committing and pushing to GitHub..." -ForegroundColor Yellow
-git commit -m "Elevate Hero section copy and typography with authentic culinary storytelling"
+git commit -m "Make hero copy short and punchy and enhance mobile background animation"
 git push -u origin main
 
 Write-Host "`n========================================================" -ForegroundColor Green

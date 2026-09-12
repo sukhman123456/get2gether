@@ -18,7 +18,7 @@ echo [3/4] Staging all files...
 git add -A
 
 echo [4/4] Committing and pushing to GitHub...
-git commit -m "Elevate Hero section copy and typography with authentic culinary storytelling"
+git commit -m "Make hero copy short and punchy and enhance mobile background animation"
 git push -u origin main
 
 echo.

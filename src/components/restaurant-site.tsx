@@ -1246,6 +1246,7 @@ function Hero({ onOpenReservation }: HeroProps) {
     let rafId: number;
     const handleScroll = () => {
       const scrollY = window.scrollY;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
       const vh = window.innerHeight || 800;
 
       if (scrollY <= vh * 1.3) {
@@ -1253,8 +1254,8 @@ function Hero({ onOpenReservation }: HeroProps) {
 
         // Parallax depth & slow reveal scaling on the background interior image
         if (heroParallaxRef.current) {
-          const pY = scrollY * 0.35;
-          const pScale = 1.0 + progress * 0.08;
+          const pY = isMobile ? scrollY * 0.15 : scrollY * 0.35;
+          const pScale = isMobile ? 1.0 : 1.0 + progress * 0.08;
           heroParallaxRef.current.style.transform = `translate3d(0, ${pY.toFixed(1)}px, 0) scale(${pScale.toFixed(3)})`;
         }
 
@@ -1301,6 +1302,7 @@ function Hero({ onOpenReservation }: HeroProps) {
             width={1920}
             height={1080}
           />
+          <div className="hero-ambient-light-sweep" aria-hidden="true" />
           <div className="hero-overlay" />
         </div>
       </div>
@@ -1316,12 +1318,12 @@ function Hero({ onOpenReservation }: HeroProps) {
 
         <div className="hero-cinematic-sub-wrap">
           <span className="hero-sub-line" />
-          <p className="hero-cinematic-subtitle">AUTHENTIC FLAVOURS • BOTANICAL AMBIENCE • TIMELESS GATHERINGS</p>
+          <p className="hero-cinematic-subtitle">FINE DINING &amp; BOTANICAL CAFE</p>
           <span className="hero-sub-line" />
         </div>
 
         <p className="hero-cinematic-tagline">
-          Where authentic clay-oven aromas, handcrafted cafe creations, and warm hospitality come together beneath glowing chandeliers in Gurdaspur.
+          Authentic flavours, warm hospitality, and unforgettable moments in Gurdaspur.
         </p>
 
         <div className="hero-actions">
