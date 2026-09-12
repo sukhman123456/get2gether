@@ -211,6 +211,18 @@ button, a {
   margin-inline: auto;
 }
 
+@media (max-width: 640px) {
+  .content-shell {
+    width: min(1200px, calc(100% - 32px));
+  }
+}
+
+@media (max-width: 360px) {
+  .content-shell {
+    width: min(1200px, calc(100% - 24px));
+  }
+}
+
 .section-pad {
   padding-block: clamp(72px, 8.5vw, 120px);
 }
@@ -716,14 +728,45 @@ button, a {
 .mobile-navbar-actions {
   display: none;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+/* Mobile Quick Call Button */
+.mobile-quick-call-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(23, 37, 31, 0.85);
+  color: #F4EFE5;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(200, 164, 93, 0.38);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+}
+
+.mobile-quick-call-btn svg {
+  color: #C8A45D;
+}
+
+.mobile-quick-call-btn:hover {
+  background: rgba(200, 164, 93, 0.22);
+  border-color: #C8A45D;
+  color: #FFFFFF;
+  transform: translateY(-1px);
 }
 
 /* Mobile Quick Reserve Button */
 .mobile-quick-reserve-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: var(--gold-btn-gradient);
   color: #171513;
   font-family: var(--font-sans);
@@ -731,7 +774,7 @@ button, a {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 8px 14px;
+  padding: 8px 13px;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   cursor: pointer;
@@ -856,11 +899,86 @@ button, a {
   color: #FFF;
 }
 
+/* Quick 4-Action Matrix in Mobile Drawer (Call, Menu, Reserve, Map) */
+.mobile-drawer-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 18px 0 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(200, 164, 93, 0.22);
+}
+
+.mobile-quick-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(23, 37, 31, 0.6);
+  border: 1px solid rgba(200, 164, 93, 0.28);
+  text-decoration: none;
+  color: #F4EFE5;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  backdrop-filter: blur(8px);
+}
+
+.mobile-quick-card:hover,
+.mobile-quick-card:active {
+  background: rgba(23, 37, 31, 0.95);
+  border-color: #C8A45D;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(200, 164, 93, 0.2);
+}
+
+.quick-card-icon {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 10px;
+  background: rgba(200, 164, 93, 0.16);
+  border: 1px solid rgba(200, 164, 93, 0.35);
+  color: #C8A45D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.mobile-quick-card:hover .quick-card-icon {
+  transform: scale(1.08);
+  color: #FFFFFF;
+}
+
+.quick-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.quick-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #F4EFE5;
+}
+
+.quick-card-sub {
+  font-size: 9.5px;
+  color: rgba(244, 239, 229, 0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin: 20px 0;
+  margin: 8px 0 20px;
   flex: 1;
 }
 
@@ -1671,6 +1789,7 @@ button, a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 46%;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -2568,6 +2687,18 @@ button, a {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
+  min-height: 240px;
+}
+
+@keyframes dishCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Menu Cards: Warm Ivory with Deep Charcoal Text & Champagne Gold Prices */
@@ -2579,6 +2710,7 @@ button, a {
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: dishCardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2588,6 +2720,48 @@ button, a {
   transform: translateY(-4px);
   border-color: var(--gold);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(201, 164, 92, 0.2);
+}
+
+/* Empty State Fallback */
+.menu-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 24px;
+  background: rgba(23, 21, 19, 0.65);
+  border: 1px dashed rgba(201, 164, 92, 0.38);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.menu-empty-state p {
+  font-size: 15px;
+  color: rgba(244, 239, 229, 0.75);
+  margin: 0 0 18px;
+}
+
+.menu-empty-state strong {
+  color: var(--gold-glow);
+}
+
+.menu-reset-filter-btn {
+  background: var(--gold-btn-gradient);
+  color: #171513;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(201, 164, 92, 0.35);
+}
+
+.menu-reset-filter-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 20px rgba(201, 164, 92, 0.5);
 }
 
 .dish-top-row {
@@ -4870,16 +5044,22 @@ button, a {
 
 .location-title {
   margin: 0 0 10px;
-  font: 500 clamp(38px, 4.8vw, 62px)/1.08 var(--font-display);
+  font: 500 clamp(32px, 4.8vw, 62px)/1.08 var(--font-display);
   letter-spacing: -0.015em;
   color: #F4EFE5;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .loc-title-line {
   display: block;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
   opacity: 0;
   transform: translateY(18px);
   filter: blur(6px);
@@ -4903,6 +5083,8 @@ button, a {
   background: linear-gradient(135deg, #fff2db 0%, #C8A45D 50%, #f6deb0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: inline-block;
+  padding-right: 6px;
 }
 
 .location-subtitle {
@@ -4911,6 +5093,8 @@ button, a {
   line-height: 1.6;
   color: rgba(244, 239, 229, 0.72);
   max-width: 520px;
+  word-break: break-word;
+  overflow-wrap: break-word;
   opacity: 0;
   transform: translateY(14px);
   transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.45s,
@@ -4923,6 +5107,8 @@ button, a {
   flex-direction: column;
   gap: 14px;
   margin-bottom: 28px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .location-card {
@@ -4932,6 +5118,9 @@ button, a {
   align-items: center;
   gap: 18px;
   padding: 18px 22px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background: linear-gradient(135deg, rgba(23, 37, 31, 0.72) 0%, rgba(18, 28, 23, 0.88) 100%);
   border: 1px solid rgba(200, 164, 93, 0.22);
   border-radius: 18px;
@@ -5013,9 +5202,12 @@ button, a {
 }
 
 .location-card-content {
-  flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   text-align: left;
   transition: transform 0.3s ease;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .location-card-label {
@@ -5034,12 +5226,15 @@ button, a {
   color: #F4EFE5;
   line-height: 1.5;
   font-weight: 400;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .location-hours-header {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .location-open-badge {
@@ -5181,6 +5376,9 @@ button, a {
 /* RIGHT COLUMN: Large Premium Interactive Map Frame */
 .location-map-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   opacity: 0;
   transform: scale(1.03);
   filter: blur(6px);
@@ -5192,6 +5390,9 @@ button, a {
 
 .location-map-frame-outer {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border-radius: 24px;
   padding: 6px;
   background: linear-gradient(135deg, rgba(200, 164, 93, 0.45) 0%, rgba(23, 37, 31, 0.6) 50%, rgba(200, 164, 93, 0.25) 100%);
@@ -5366,17 +5567,35 @@ button, a {
 /* Mobile Responsiveness */
 @media (max-width: 960px) {
   .location-section {
-    padding: 72px 20px 78px;
+    padding: 64px 0 72px;
+  }
+
+  .location-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .location-grid {
     grid-template-columns: 1fr;
-    gap: 38px;
+    gap: 36px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .location-details {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .location-map-wrapper {
+    width: 100%;
+    min-width: 0;
   }
 
   .location-map-inner {
     aspect-ratio: 16 / 11;
-    min-height: 290px;
+    min-height: 280px;
   }
 
   .location-mouse-glow,
@@ -5390,8 +5609,194 @@ button, a {
 
   .location-call-btn,
   .location-directions-btn {
-    flex: 1 1 220px;
+    flex: 1 1 200px;
     justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .location-section {
+    padding: 52px 0 60px;
+  }
+
+  .location-grid {
+    gap: 28px;
+  }
+
+  .location-eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .location-title {
+    font-size: clamp(28px, 8.5vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .loc-title-line-2 em {
+    display: inline-block;
+    padding-right: 4px;
+  }
+
+  .location-subtitle {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .location-cards-stack {
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .location-card {
+    padding: 13px 15px;
+    gap: 12px;
+    border-radius: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .location-card-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .location-card-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .location-card-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+
+  .location-card-text {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+
+  .location-hours-header {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .location-open-badge {
+    font-size: 9px;
+    padding: 1px 7px;
+    margin-bottom: 2px;
+  }
+
+  .location-card-arrow-link {
+    width: 28px;
+    height: 28px;
+  }
+
+  .location-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .location-call-btn,
+  .location-directions-btn {
+    width: 100%;
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 13px 20px;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .location-map-frame-outer {
+    border-radius: 18px;
+    padding: 4px;
+  }
+
+  .location-map-inner {
+    aspect-ratio: 16 / 11;
+    min-height: 230px;
+    border-radius: 14px;
+  }
+
+  .map-floating-tag {
+    top: 10px;
+    left: 10px;
+    padding: 6px 10px;
+    gap: 7px;
+    border-radius: 9px;
+    max-width: calc(100% - 20px);
+  }
+
+  .map-floating-pin {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+  }
+
+  .map-floating-pin svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .map-tag-title {
+    font-size: 10px;
+  }
+
+  .map-tag-loc {
+    font-size: 8.5px;
+  }
+
+  .map-floating-action {
+    bottom: 10px;
+    left: 10px;
+    padding: 6px 10px;
+    font-size: 10.5px;
+    border-radius: 7px;
+  }
+}
+
+@media (max-width: 360px) {
+  .location-title {
+    font-size: 25px;
+    line-height: 1.15;
+  }
+
+  .location-card {
+    padding: 11px 12px;
+    gap: 10px;
+    border-radius: 12px;
+  }
+
+  .location-card-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .location-card-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .location-card-text {
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+
+  .location-call-btn,
+  .location-directions-btn {
+    padding: 12px 14px;
+    font-size: 12px;
   }
 }
 
@@ -5851,6 +6256,10 @@ button, a {
 }
 
 @media (max-width: 640px) {
+  .site-footer {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
+  }
+
   .footer-trust-banner {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -6127,47 +6536,10 @@ button, a {
 }
 
 /* ========================================================
-   17. MOBILE STICKY ACTION BAR
+   17. MOBILE STICKY ACTION BAR (REMOVED - INTEGRATED INTO HEADER & MENU)
    ======================================================== */
 .mobile-action-bar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 90;
-  background: rgba(23, 21, 19, 0.96);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(201, 164, 92, 0.25);
-  grid-template-columns: repeat(4, 1fr);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
-}
-
-.mobile-action-bar a,
-.mobile-action-bar .mobile-bar-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 10px 0;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--charcoal-muted);
-  text-decoration: none;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.mobile-action-bar a:hover,
-.mobile-action-bar .mobile-bar-btn:hover {
-  color: var(--gold-glow);
-}
-
-.mobile-action-bar svg {
-  width: 18px;
-  height: 18px;
+  display: none !important;
 }
 
 /* ========================================================
@@ -6311,15 +6683,16 @@ button, a {
     );
   }
 
-  /* Floating social buttons safe position on mobile */
+  /* Floating social buttons position on mobile */
   .floating-social-dock {
-    right: 18px;
-    bottom: 74px; /* safe distance above bottom action bar */
-    gap: 10px;
+    right: 14px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+    z-index: 120;
+    gap: 8px;
   }
   .social-icon-box {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
   }
   .social-icon-box svg {
     width: 20px;
@@ -6329,12 +6702,6 @@ button, a {
     display: none; /* hidden on small mobile to avoid blocking content */
   }
 
-  .mobile-action-bar {
-    display: grid;
-  }
-  .site-footer {
-    padding-bottom: 96px;
-  }
   .footer-bottom {
     flex-direction: column;
     gap: 14px;
@@ -6428,17 +6795,20 @@ button, a {
     width: 36px !important;
     height: 36px !important;
   }
+  .mobile-quick-call-btn span,
   .mobile-quick-reserve-btn span {
     display: none;
   }
+  .mobile-quick-call-btn,
   .mobile-quick-reserve-btn {
-    padding: 7px 9px;
+    padding: 7px 10px;
   }
   .section-pad {
     padding-block: 54px;
   }
   .experience-panorama-card {
-    min-width: 290px;
+    min-width: min(280px, calc(100vw - 36px));
+    max-width: calc(100vw - 36px);
   }
   .intro-seal-badge {
     top: 12px;

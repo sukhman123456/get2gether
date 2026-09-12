@@ -54,6 +54,7 @@ import tasteTandooriSizzler from "@/assets/taste-tandoori-sizzler.jpg";
 import tasteDumBiryani from "@/assets/taste-dum-biryani.jpg";
 import tasteStonePizza from "@/assets/taste-stone-pizza.jpg";
 import tasteBotanicalMocktail from "@/assets/taste-botanical-mocktail.jpg";
+import signaturePaneerTikkaImage from "@/assets/signature-paneer-tikka.jpg";
 
 const phoneDisplay = "094637 17523";
 const phoneHref = "tel:+919463717523";
@@ -435,7 +436,7 @@ const menuCategoriesData: MenuCategory[] = [
     tag: "AROMATIC GRAINS",
     eyebrow: "DUM-SEALED BASMATI",
     description: "Royal aged long-grain basmati layered with fragrant spices, kewra essence, caramelized onions and served with chilled raita.",
-    image: tableImage,
+    image: tasteDumBiryani,
     items: [
       { title: "Chicken Biryani with Raita", price: "₹319", description: "Fragrant long-grain basmati layered with marinated chicken, saffron and mint.", isVeg: false, isPopular: true },
       { title: "Chicken Dum Biryani with Raita", price: "₹349", description: "Sealed dum cooked chicken biryani infused with kewra, fried onions and boiled egg.", isVeg: false, isPopular: true },
@@ -484,7 +485,7 @@ const signatureDishesData = [
     category: "TANDOORI",
     price: "₹269",
     description: "Succulent cottage cheese cubes marinated in Kashmiri chili and hung curd, roasted over live embers.",
-    image: tableImage,
+    image: signaturePaneerTikkaImage,
     isVeg: true,
   },
   {
@@ -1047,16 +1048,26 @@ function Navbar({ onOpenReservation }: NavbarProps) {
           </button>
         </div>
 
-        {/* Mobile Right Controls: Quick Reserve Pill + Animated Hamburger */}
+        {/* Mobile Right Controls: Quick Call + Quick Reserve Pill + Animated Hamburger */}
         <div className="mobile-navbar-actions">
+          <a
+            href={phoneHref}
+            className="mobile-quick-call-btn"
+            aria-label="Call Restaurant"
+            title={`Call ${phoneDisplay}`}
+          >
+            <Phone size={13} aria-hidden="true" />
+            <span className="mobile-btn-text">CALL</span>
+          </a>
+
           <button
             type="button"
             onClick={onOpenReservation}
             className="mobile-quick-reserve-btn"
             aria-label="Reserve a table"
           >
-            <Calendar size={12} aria-hidden="true" />
-            <span>RESERVE</span>
+            <Calendar size={13} aria-hidden="true" />
+            <span className="mobile-btn-text">RESERVE</span>
           </button>
 
           <button
@@ -1093,6 +1104,74 @@ function Navbar({ onOpenReservation }: NavbarProps) {
             >
               <X size={20} />
             </button>
+          </div>
+
+          {/* Quick 4-Action Matrix: Call / Menu / Reserve / Map */}
+          <div className="mobile-drawer-quick-actions">
+            <a
+              href={phoneHref}
+              className="mobile-quick-card"
+              onClick={() => setOpen(false)}
+              aria-label="Call Restaurant"
+            >
+              <div className="quick-card-icon">
+                <Phone size={16} />
+              </div>
+              <div className="quick-card-text">
+                <span className="quick-card-label">CALL</span>
+                <span className="quick-card-sub">{phoneDisplay}</span>
+              </div>
+            </a>
+
+            <a
+              href="#menu"
+              className="mobile-quick-card"
+              onClick={() => setOpen(false)}
+              aria-label="View Menu"
+            >
+              <div className="quick-card-icon">
+                <UtensilsCrossed size={16} />
+              </div>
+              <div className="quick-card-text">
+                <span className="quick-card-label">MENU</span>
+                <span className="quick-card-sub">120+ Dishes</span>
+              </div>
+            </a>
+
+            <button
+              type="button"
+              className="mobile-quick-card"
+              onClick={() => {
+                setOpen(false);
+                onOpenReservation();
+              }}
+              aria-label="Reserve a Table"
+            >
+              <div className="quick-card-icon">
+                <Calendar size={16} />
+              </div>
+              <div className="quick-card-text">
+                <span className="quick-card-label">RESERVE</span>
+                <span className="quick-card-sub">Table Booking</span>
+              </div>
+            </button>
+
+            <a
+              href={directionsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mobile-quick-card"
+              onClick={() => setOpen(false)}
+              aria-label="Get Directions"
+            >
+              <div className="quick-card-icon">
+                <MapPin size={16} />
+              </div>
+              <div className="quick-card-text">
+                <span className="quick-card-label">MAP</span>
+                <span className="quick-card-sub">Get Directions</span>
+              </div>
+            </a>
           </div>
 
           <nav className="mobile-nav-links">
@@ -1828,7 +1907,14 @@ function MenuSection() {
                     role="tab"
                     aria-selected={isActive}
                     className={`menu-luxury-tab-btn ${isActive ? "active" : ""}`}
-                    onClick={() => setActiveCategoryId(cat.id)}
+                    onClick={(e) => {
+                      setActiveCategoryId(cat.id);
+                      (e.currentTarget as HTMLElement).scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
+                      });
+                    }}
                   >
                     <span className="tab-pill-diamond" aria-hidden="true">
                       {isActive ? "✦" : "•"}
@@ -1891,50 +1977,66 @@ function MenuSection() {
           </div>
         </div>
 
-        {/* Menu Dish Cards with 3D Tilt */}
-        <div className="menu-items-list">
-          {filteredItems.map((dish, dIdx) => (
-            <Card3DTilt
-              key={dish.title}
-              className="menu-dish-item cinematic-reveal"
-              style={{ animationDelay: `${(dIdx % 6) * 60}ms` }}
-            >
-              <div className="dish-top-row">
-                <div className="dish-identity">
-                  <span
-                    className={dish.isVeg ? "veg-badge-square" : "nonveg-badge-square"}
-                    title={dish.isVeg ? "Vegetarian" : "Non-Vegetarian"}
-                  >
-                    <span className={dish.isVeg ? "veg-badge-dot" : "nonveg-badge-dot"} />
+        {/* Menu Dish Cards */}
+        <div className="menu-items-list" key={`${activeCategoryId}-${filterType}`}>
+          {filteredItems.length === 0 ? (
+            <div className="menu-empty-state">
+              <p>
+                No dishes found under <strong>{activeCategory.label}</strong> matching the "{filterType.toUpperCase()}" filter.
+              </p>
+              <button
+                type="button"
+                onClick={() => setFilterType("all")}
+                className="menu-reset-filter-btn"
+              >
+                Show All {activeCategory.label} Dishes ({activeCategory.items.length})
+              </button>
+            </div>
+          ) : (
+            filteredItems.map((dish, dIdx) => (
+              <div
+                key={dish.title}
+                className="menu-dish-item"
+                style={{ animationDelay: `${(dIdx % 8) * 35}ms` }}
+              >
+                <div className="dish-top-row">
+                  <div className="dish-identity">
+                    <span
+                      className={dish.isVeg ? "veg-badge-square" : "nonveg-badge-square"}
+                      title={dish.isVeg ? "Vegetarian" : "Non-Vegetarian"}
+                    >
+                      <span className={dish.isVeg ? "veg-badge-dot" : "nonveg-badge-dot"} />
+                    </span>
+                    <h4 className="dish-name">{dish.title}</h4>
+                    {dish.isPopular && <span className="dish-popular-tag">Chef Choice</span>}
+                  </div>
+                  <div className="dish-price-wrap">
+                    <span className="dish-price">{dish.price}</span>
+                  </div>
+                </div>
+
+                <p className="dish-description">{dish.description}</p>
+
+                <div className="dish-bottom-bar">
+                  <span className="dish-type-note">
+                    {dish.isVeg ? "Pure Vegetarian" : "Authentic Non-Veg"}
                   </span>
-                  <h4 className="dish-name">{dish.title}</h4>
-                  {dish.isPopular && <span className="dish-popular-tag">Chef Choice</span>}
-                </div>
-                <div className="dish-price-wrap">
-                  <span className="dish-price">{dish.price}</span>
+                  <a
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      `Hello Get 2 Gather, I would like to order: ${dish.title} (${dish.price})`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="dish-order-link"
+                    title={`Order ${dish.title} via WhatsApp`}
+                  >
+                    <span>Order Direct</span>
+                    <ArrowRight size={13} aria-hidden="true" />
+                  </a>
                 </div>
               </div>
-
-              <p className="dish-description">{dish.description}</p>
-
-              <div className="dish-bottom-bar">
-                <span className="dish-type-note">
-                  {dish.isVeg ? "Pure Vegetarian" : "Authentic Non-Veg"}
-                </span>
-                <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                    `Hello Get 2 Gather, I would like to order: ${dish.title} (${dish.price})`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dish-order-link"
-                >
-                  <span>Order Direct</span>
-                  <ArrowRight size={13} aria-hidden="true" />
-                </a>
-              </div>
-            </Card3DTilt>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Full Menu Custom Callout */}
@@ -3495,46 +3597,6 @@ function Footer({ onOpenReservation }: FooterProps) {
 }
 
 /* ========================================================
-   MOBILE STICKY ACTION BAR
-   ======================================================== */
-interface MobileStickyBarProps {
-  onOpenReservation: () => void;
-}
-
-function MobileStickyBar({ onOpenReservation }: MobileStickyBarProps) {
-  return (
-    <nav className="mobile-action-bar" aria-label="Mobile quick actions">
-      <a href={phoneHref} aria-label="Call Restaurant">
-        <Phone />
-        <span>Call</span>
-      </a>
-      <a href="#menu" aria-label="View Menu">
-        <UtensilsCrossed />
-        <span>Menu</span>
-      </a>
-      <button
-        type="button"
-        onClick={onOpenReservation}
-        className="mobile-bar-btn"
-        aria-label="Reserve Table"
-      >
-        <Calendar />
-        <span>Reserve</span>
-      </button>
-      <a
-        href={directionsHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Get Directions"
-      >
-        <MapPin />
-        <span>Map</span>
-      </a>
-    </nav>
-  );
-}
-
-/* ========================================================
    MAIN RESTAURANT SITE EXPORT
    ======================================================== */
 export function RestaurantSite() {
@@ -3586,7 +3648,6 @@ export function RestaurantSite() {
       </main>
       <Footer onOpenReservation={() => setReservationOpen(true)} />
       <FloatingSocialDock />
-      <MobileStickyBar onOpenReservation={() => setReservationOpen(true)} />
       <ReservationModal
         isOpen={reservationOpen}
         onClose={() => setReservationOpen(false)}

@@ -25,6 +25,22 @@ try {
     fs.copyFileSync(founderSrc, destFounderPublic);
   }
 
+  const chandelierSrc = "C:/Users/hp/.gemini/antigravity-ide/brain/06341115-226d-4cca-a485-ef81734d8941/.user_uploaded/media_1789230049835.jpg";
+  const destChandelierAssets = path.resolve("src/assets/g2g-chandelier-ambiance.jpg");
+  const destChandelierPublic = path.resolve("public/g2g-chandelier-ambiance.jpg");
+  if (fs.existsSync(chandelierSrc)) {
+    fs.copyFileSync(chandelierSrc, destChandelierAssets);
+    fs.copyFileSync(chandelierSrc, destChandelierPublic);
+  }
+
+  const paneerTikkaSrc = "C:/Users/hp/.gemini/antigravity-ide/brain/06341115-226d-4cca-a485-ef81734d8941/authentic_paneer_tikka_1789230684677.jpg";
+  const destPaneerAssets = path.resolve("src/assets/signature-paneer-tikka.jpg");
+  const destPaneerPublic = path.resolve("public/signature-paneer-tikka.jpg");
+  if (fs.existsSync(paneerTikkaSrc)) {
+    fs.copyFileSync(paneerTikkaSrc, destPaneerAssets);
+    fs.copyFileSync(paneerTikkaSrc, destPaneerPublic);
+  }
+
   const tasteImages = [
     {
       src: "C:/Users/hp/.gemini/antigravity-ide/brain/06341115-226d-4cca-a485-ef81734d8941/fiery_tandoori_sizzler_1789225823952.jpg",
